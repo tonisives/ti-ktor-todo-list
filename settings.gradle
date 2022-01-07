@@ -1,0 +1,21 @@
+rootProject.name = "com.tonisives.ti-ktor-todo-list"
+
+enableFeaturePreview("VERSION_CATALOGS")
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            version("ktor", "2.0.0-beta-1")
+            alias("ktor-core").to("io.ktor", "ktor-server-core").versionRef("ktor")
+
+            alias("ktor-content-negotiation").to("io.ktor", "ktor-server-content-negotiation").versionRef("ktor")
+            alias("ktor-serialization").to("io.ktor", "ktor-serialization-kotlinx-json").versionRef("ktor")
+
+            alias("ktor-netty").to("io.ktor", "ktor-server-netty").versionRef("ktor")
+            alias("ktor-call-logging").to("io.ktor", "ktor-server-call-logging").versionRef("ktor")
+
+            alias("ktor-tests").to("io.ktor", "ktor-server-tests").versionRef("ktor")
+            alias("logback").to("ch.qos.logback:logback-classic:1.2.3")
+        }
+    }
+}

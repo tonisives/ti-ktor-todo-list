@@ -1,0 +1,26 @@
+plugins {
+    id 'application'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
+}
+
+group "com.tonisives"
+version "0.0.1"
+mainClassName = "com.tonisives.ApplicationKt"
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }
+}
+
+dependencies {
+    implementation libs.ktor.core
+    implementation libs.ktor.netty
+    implementation libs.ktor.content.negotiation
+    implementation libs.ktor.serialization
+    implementation libs.ktor.call.logging
+    implementation libs.logback
+
+    testImplementation libs.ktor.tests
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+}
