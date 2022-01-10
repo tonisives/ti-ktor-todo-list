@@ -1,6 +1,7 @@
 package com.tonisives
 
-import com.tonisives.entities.Todo
+import InMemoryTodoRepository
+import TodoRepository
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -10,6 +11,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
+
 import org.slf4j.event.Level
 
 fun main() {
@@ -19,23 +21,21 @@ fun main() {
 
         // Starting point for a Ktor app:
         routing {
-            val todos = listOf(
-                Todo(1, "Plan content for video #2", true),
-                Todo(2, "Water the flowers", false),
-                Todo(3, "Go walk on the beach", false)
-            )
-
             get("/") {
                 call.respondText("Hello World!")
             }
 
             get("/todos") {
-                call.respond(todos)
+                call.respond(repository.getAllTodos())
             }
 
             get("/todos/{id}") {
-                val id = call.parameters["id"]
-                call.respondText("Todolist Details for Todo item $id")
+                val id = call.parameters["id"]?.toIntOrNull()
+                id?.let {
+                    repository.getToDo(it)?.let { todo ->
+                        call.respond(todo)
+                    }
+                }
             }
 
             post("/todos") {
@@ -73,4 +73,8 @@ fun Application.configureSerialization() {
             call.respond(mapOf("hello" to "world"))
         }
     }
+}
+
+val repository: TodoRepository by lazy {
+    InMemoryTodoRepository()
 }
