@@ -9,6 +9,7 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.json.Json
 import org.slf4j.event.Level
 
 fun main() {
@@ -62,7 +63,9 @@ fun Application.configureLogging() {
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
-        json()
+        json(Json {
+            prettyPrint = true
+        })
     }
 
     routing {

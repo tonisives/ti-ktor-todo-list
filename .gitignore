@@ -84,3 +84,4 @@ obj
 *.so
 *.o
 *.o.d
+/bin/
