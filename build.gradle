@@ -14,8 +14,6 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
     implementation libs.ktor.core
     implementation libs.ktor.netty
     implementation libs.ktor.content.negotiation
