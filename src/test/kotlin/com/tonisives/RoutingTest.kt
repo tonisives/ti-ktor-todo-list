@@ -3,6 +3,7 @@ package com.tonisives
 import TodoDraft
 import com.tonisives.entities.Todo
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -71,6 +72,22 @@ class RoutingTest {
             val todo = Json.decodeFromString<Todo>(String(updatedResponse.readBytes()))
             assert(todo.title == "updated")
             assert(todo.done)
+        }
+    }
+
+    @Test
+    fun verifyNotFoundErrorReturned() = testApplication {
+        application {
+            configureSerialization()
+            configureRouting()
+        }
+
+        try {
+            val response = client.get("/todos/8") {
+
+            }
+        } catch (e: ClientRequestException) {
+            assert(e.response.status == HttpStatusCode.NotFound)
         }
     }
 }
