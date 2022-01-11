@@ -1,3 +1,6 @@
+package com.tonisives.repository
+
+import TodoDraft
 import com.tonisives.entities.Todo
 
 class InMemoryTodoRepository : TodoRepository {
@@ -11,7 +14,7 @@ class InMemoryTodoRepository : TodoRepository {
         return todos
     }
 
-    override fun getToDo(id: Int): Todo? {
+    override fun getTodo(id: Int): Todo? {
         return todos.firstOrNull { it.id == id }
     }
 

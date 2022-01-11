@@ -18,6 +18,7 @@ dependencyResolutionManagement {
             alias("ktor-test-host").to("io.ktor", "ktor-server-test-host").versionRef("ktor")
 
             alias("logback").to("ch.qos.logback:logback-classic:1.2.3")
+
         }
     }
 }

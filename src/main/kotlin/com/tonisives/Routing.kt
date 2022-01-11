@@ -26,7 +26,7 @@ fun Application.configureRouting() {
                 return@get
             }
 
-            repository.getToDo(id)?.let { todo ->
+            repository.getTodo(id)?.let { todo ->
                 call.respond(todo)
             } ?: run {
                 respondTodoNotFound(id)
