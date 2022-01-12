@@ -5,7 +5,8 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            version("ktor", "2.0.0-beta-1")
+            // eap builds https://ktor.io/eap/
+            version("ktor", "2.0.0-eap-278")
             alias("ktor-core").to("io.ktor", "ktor-server-core").versionRef("ktor")
 
             alias("ktor-content-negotiation").to("io.ktor", "ktor-server-content-negotiation").versionRef("ktor")
@@ -14,11 +15,13 @@ dependencyResolutionManagement {
             alias("ktor-netty").to("io.ktor", "ktor-server-netty").versionRef("ktor")
             alias("ktor-call-logging").to("io.ktor", "ktor-server-call-logging").versionRef("ktor")
 
+            alias("ktor-auth").to("io.ktor", "ktor-auth").versionRef("ktor")
+            alias("ktor-jwt").to("io.ktor", "ktor-auth-jwt").versionRef("ktor")
+
             alias("ktor-tests").to("io.ktor", "ktor-server-tests").versionRef("ktor")
             alias("ktor-test-host").to("io.ktor", "ktor-server-test-host").versionRef("ktor")
 
             alias("logback").to("ch.qos.logback:logback-classic:1.2.3")
-
         }
     }
 }

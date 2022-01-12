@@ -20,6 +20,9 @@ dependencies {
     implementation libs.ktor.serialization
     implementation libs.ktor.call.logging
     implementation libs.logback
+    // jwt
+    implementation libs.ktor.auth
+    implementation libs.ktor.jwt
 
     // database
     implementation 'mysql:mysql-connector-java:8.0.11'
