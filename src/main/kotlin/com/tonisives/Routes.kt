@@ -3,15 +3,22 @@ package com.tonisives
 import TodoDraft
 import com.tonisives.authentication.JwtConfig
 import com.tonisives.entities.LoginBody
+import com.tonisives.repository.TodoRepository
+import com.tonisives.repository.UserRepository
+import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.util.pipeline.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
 
-fun Application.configureRouting() {
+import io.ktor.util.pipeline.*
+import org.koin.ktor.ext.inject
+
+fun Application.configureRouting(jwtConfig: JwtConfig) {
+    val userRepository by inject<UserRepository>()
+    val repository by inject<TodoRepository>()
+
     routing {
         get("/") {
             call.respondText("Hello World!")

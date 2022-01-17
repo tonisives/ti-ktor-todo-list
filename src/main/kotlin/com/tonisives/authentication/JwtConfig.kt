@@ -3,8 +3,8 @@ package com.tonisives.authentication
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.*
 import kotlinx.serialization.Serializable
 
 class JwtConfig(jwtSecret: String) {

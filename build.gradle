@@ -16,19 +16,23 @@ repositories {
 dependencies {
     implementation libs.ktor.core
     implementation libs.ktor.netty
-    implementation libs.ktor.content.negotiation
     implementation libs.ktor.serialization
-    implementation libs.ktor.call.logging
     implementation libs.logback
     // jwt
     implementation libs.ktor.auth
     implementation libs.ktor.jwt
+
+    implementation libs.koin.ktor
 
     // database
     implementation 'mysql:mysql-connector-java:8.0.11'
     implementation "org.ktorm:ktorm-core:3.2.0"
     implementation "org.ktorm:ktorm-support-mysql:3.2.0"
 
+    // test
     testImplementation libs.ktor.tests
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation libs.mockk
 }
+
+apply from: "https://raw.githubusercontent.com/tonisives/tools/master/scripts/test-shell-logging.gradle"
