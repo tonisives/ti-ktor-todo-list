@@ -7,6 +7,6 @@ import com.tonisives.repository.UserRepository
 import org.koin.dsl.module
 
 val appModules = module {
-    single { InMemoryTodoRepository() } as TodoRepository
-    single { InMemoryUserRepository() } as UserRepository
+    single { InMemoryTodoRepository() as TodoRepository }
+    single { InMemoryUserRepository() as UserRepository }
 }
