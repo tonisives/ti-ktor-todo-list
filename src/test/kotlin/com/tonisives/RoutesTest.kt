@@ -1,7 +1,7 @@
 package com.tonisives
 
 import com.tonisives.authentication.JwtConfig
-import com.tonisives.koin.appModules
+import com.tonisives.entities.Todo
 import com.tonisives.repository.InMemoryTodoRepository
 import com.tonisives.repository.InMemoryUserRepository
 import com.tonisives.repository.TodoRepository
@@ -9,10 +9,11 @@ import com.tonisives.repository.UserRepository
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonObject
 import org.junit.Before
 import org.junit.Test
 import org.koin.dsl.module
@@ -47,12 +48,10 @@ class RoutesTest {
         var authToken = ""
         fun Application.test() {
             install(Koin) {
-                modules(
-                    module {
-                        single { InMemoryUserRepository() as UserRepository }
-                        single { InMemoryTodoRepository() as TodoRepository }
-                    }
-                )
+                modules(module {
+                    single { InMemoryUserRepository() as UserRepository }
+                    single { InMemoryTodoRepository() as TodoRepository }
+                })
             }
             configureSerialization()
             val auth = configureAuth("jwt")
@@ -72,60 +71,67 @@ class RoutesTest {
         }
     }
 
-/*
     @Test
-    fun testSingleTodo() = testApplication {
-        application {
-            configureSerialization()
-            configureRouting()
+    fun testGetSingleTodo() {
+        var authToken = ""
+
+        val mockRepo = mockk<TodoRepository> {
+            every { getTodo(any()) } returns Todo(1, "test title", false)
         }
 
-        client.get("/todos/2") {
-        }.let {
-            assert(it.call.response.status == HttpStatusCode.OK)
-            val todo = Json.decodeFromString<Todo>(String(it.readBytes()))
-            assert(todo.id == 2)
+        fun Application.test() {
+            install(Koin) {
+                modules(module {
+                    single { InMemoryUserRepository() as UserRepository }
+                    single { mockRepo }
+                })
+            }
+            configureSerialization()
+            val auth = configureAuth("jwt")
+            authToken = auth.generateToken(JwtConfig.JwtUser(1, "pass"))
+            configureRouting(auth)
+
+        }
+
+        withTestApplication(Application::test) {
+            handleRequest(HttpMethod.Get, "/todos/1") {
+                addHeader("Authorization", "Bearer $authToken")
+            }.apply {
+                assert(response.status() == HttpStatusCode.OK)
+                val json = Json.decodeFromString<Todo>(response.content!!)
+                assert(json.title == "test title")
+            }
         }
     }
 
     @Test
-    fun testUpdate() = testApplication {
-        application {
-            install(ContentNegotiation) {
-                json(Json)
-            }
-            configureRouting()
+    fun verifyNotFoundErrorReturned() {
+        var authToken = ""
+
+        val mockRepo = mockk<TodoRepository> {
+            every { getTodo(any()) } returns null
         }
 
-        val todoDraft = TodoDraft("updated", true)
-        val bytesBody = Json.encodeToString(todoDraft)
+        fun Application.test() {
+            install(Koin) {
+                modules(module {
+                    single { InMemoryUserRepository() as UserRepository }
+                    single { mockRepo }
+                })
+            }
+            configureSerialization()
+            val auth = configureAuth("jwt")
+            authToken = auth.generateToken(JwtConfig.JwtUser(1, "pass"))
+            configureRouting(auth)
 
-        client.post("/todos/2") {
-            contentType(ContentType.Application.Json)
-            setBody(bytesBody.encodeToByteArray())
-        }.let {
-            assert(it.call.response.status == HttpStatusCode.OK)
+        }
 
-            val updatedResponse = client.get("todos/2")
-            val todo = Json.decodeFromString<Todo>(String(updatedResponse.readBytes()))
-            assert(todo.title == "updated")
-            assert(todo.done)
+        withTestApplication(Application::test) {
+            handleRequest(HttpMethod.Get, "/todos/8") {
+                addHeader("Authorization", "Bearer $authToken")
+            }.apply {
+                assert(response.status() == HttpStatusCode.NotFound)
+            }
         }
     }
-
-    @Test
-    fun verifyNotFoundErrorReturned() = testApplication {
-        application {
-            configureSerialization()
-            configureRouting()
-        }
-
-        try {
-            val response = client.get("/todos/8") {
-
-            }
-        } catch (e: ClientRequestException) {
-            assert(e.response.status == HttpStatusCode.NotFound)
-        }
-    }*/
 }
