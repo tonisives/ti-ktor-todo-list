@@ -1,4 +1,4 @@
-package com.tonisives.koin
+package com.tonisives
 
 import com.tonisives.repository.InMemoryTodoRepository
 import com.tonisives.repository.InMemoryUserRepository

@@ -1,10 +1,6 @@
 package com.tonisives
 
 import com.tonisives.authentication.JwtConfig
-import com.tonisives.koin.appModules
-import com.tonisives.repository.InMemoryTodoRepository
-import com.tonisives.repository.InMemoryUserRepository
-import com.tonisives.repository.TodoRepository
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.auth.*
